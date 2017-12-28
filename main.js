@@ -28,6 +28,8 @@ var randomColor = function(colors) {
     var num = Math.floor(Math.random()*upper);
     return colors[num];
 }
+// determine if all colors are complete
+// if yes then done
 
 while (totalCounter < (arr.length * 2)) {
     var color = randomColor(arr);
@@ -41,25 +43,39 @@ while (totalCounter < (arr.length * 2)) {
         ++totalCounter
         ++card_id
         ++counter[color]
-    }
-
-    // determine if all colors are complete
-    // if yes then done
-
-    
+    }  
 };
 
-var attempts = 0;
 var matches = 0;
+var remember = null;
+var attempts = 0;
 
-
-$('#matchGame').on('click', '.front', function(event) {
-    if (matches < arr.length) {
-        alert ("Keep Trying");
-    }
-    else{
+$('#matchGame').on('click', '.back', function(event) {
+    if (matches >= arr.length) {
         alert ("You Win");
+        return;
     }
+     //show the color
+    var ct = $(event.currentTarget).children('.front');
+    ct.css('visibility', 'visible');
+
+    if (remember === null){
+        remember = ct;
+        return;
+    } 
+    debugger;
+    attempts++;
+    if (ct.css('background-color') === remember.css('background-color')) {
+        matches++;
+    } else {
+        //show the colors for 5 seconds or until next click
+        setTimeout( function(){
+            ct.css('visibility', 'hidden');
+            remember.css('visibility', 'hidden')
+        },5000);
+        
+    }
+    remember = null;
     
 });
 

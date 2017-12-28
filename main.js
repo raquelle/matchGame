@@ -49,6 +49,7 @@ while (totalCounter < (arr.length * 2)) {
 var matches = 0;
 var remember = null;
 var attempts = 0;
+var remember2 = null;
 
 $('#matchGame').on('click', '.back', function(event) {
     if (matches >= arr.length) {
@@ -56,28 +57,32 @@ $('#matchGame').on('click', '.back', function(event) {
         return;
     }
      //show the color
+     if (remember2 !== null){
+        remember.css('visibility', 'hidden');
+        remember2.css('visibility', 'hidden');
+        remember2 = null;
+        remember = null;
+    }
     var ct = $(event.currentTarget).children('.front');
+    if( ct.css('visibility') === 'visible'){
+        return;
+    }
     ct.css('visibility', 'visible');
 
     if (remember === null){
         remember = ct;
         return;
     } 
-    debugger;
+     
+    
     attempts++;
     if (ct.css('background-color') === remember.css('background-color')) {
-        matches++;
-    } else {
-        //show the colors for 5 seconds or until next click
-        setTimeout( function(){
-            ct.css('visibility', 'hidden');
-            remember.css('visibility', 'hidden')
-        },5000);
-        
+        matches++;    
     }
-    remember = null;
+    else{
+        remember2 = ct;
+    }
     
 });
-
 
 })

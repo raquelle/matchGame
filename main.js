@@ -54,6 +54,7 @@ var matches = 0;
 var remember = null;
 var attempts = 0;
 var remember2 = null;
+var state = 'initial';
 
 
 //this is only part that runs on click
@@ -91,20 +92,31 @@ $('#matchGame').on('click', '.back', function(event) {
     if (ct.css('background-color') === remember.css('background-color')) {
         matches++;  
         remember = null;
-        alert ("You Matched!");    
+        state = 'match';
+        ct.change();   
     }
     //If not a match then you remember the last card
     else{
         remember2 = ct;
     }
+    
+});
 
+$('.front').on('change', function(event){
+    debugger;
+    switch (state){
+        case 'match':
+        alert ("You Matched!"); 
+        state = 'attempt';
+        break;
+    }
+    
     // determine if all colors are complete
     // if yes then done
     if (matches >= arr.length) {
         alert ("You Win");
-        return;
     }
-    
+
 });
 
 })

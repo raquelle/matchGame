@@ -14,6 +14,8 @@ $(document).ready( function(){
 
 //when an element that already has a match is clicked it does nothing
 
+
+//we are creating a counter for all elements in the array
 let arr = ["blue", "green"];
 var counter = {};
 for (var ix=0; ix < arr.length; ix++) {
@@ -23,18 +25,18 @@ for (var ix=0; ix < arr.length; ix++) {
 var totalCounter = 0;
 var card_id = 1;
 
+//we are creating a function to be used later to create our deck of cards
 var randomColor = function(colors) {
     var upper = colors.length;
     var num = Math.floor(Math.random()*upper);
     return colors[num];
 }
-// determine if all colors are complete
-// if yes then done
 
+//deal out all pairs
 while (totalCounter < (arr.length * 2)) {
     var color = randomColor(arr);
 
-    // determine if the color is complete
+    // determine if the color has a pair
     // if not then set current cell to the color
     if (counter[color] < 2) {
         var cardName = "#card" + card_id.toString();
@@ -46,41 +48,61 @@ while (totalCounter < (arr.length * 2)) {
     }  
 };
 
+
+//QUESTION is this setting attempts to null everytime?
 var matches = 0;
 var remember = null;
 var attempts = 0;
 var remember2 = null;
 
+
+//this is only part that runs on click
 $('#matchGame').on('click', '.back', function(event) {
-    if (matches >= arr.length) {
-        alert ("You Win");
-        return;
-    }
-     //show the color
+  
+     //if you can see the second card hide both cards
      if (remember2 !== null){
         remember.css('visibility', 'hidden');
         remember2.css('visibility', 'hidden');
         remember2 = null;
         remember = null;
     }
+    //name the front
     var ct = $(event.currentTarget).children('.front');
+
+    //if the current card is visible on click then go back
     if( ct.css('visibility') === 'visible'){
         return;
     }
+    
+    //card clicked will become visible
     ct.css('visibility', 'visible');
 
+    //if first card is showing remember it is showing
     if (remember === null){
         remember = ct;
         return;
     } 
-     
-    
+    //In order to arrive at this place you are on the second card
+    //keep track of number of attempts 
     attempts++;
+
+
+    //Is it a match?
     if (ct.css('background-color') === remember.css('background-color')) {
-        matches++;    
+        matches++;  
+        remember = null;
+        alert ("You Matched!");    
     }
+    //If not a match then you remember the last card
     else{
         remember2 = ct;
+    }
+
+    // determine if all colors are complete
+    // if yes then done
+    if (matches >= arr.length) {
+        alert ("You Win");
+        return;
     }
     
 });
